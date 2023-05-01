@@ -75,6 +75,7 @@ window.addEventListener('keydown', function (e) {
     el.classList.add('active');
     keyAction(el);
     detectChangeLang(el);
+    detectShift(el);
 })
 
 window.addEventListener('keyup', function (e) {
@@ -82,6 +83,7 @@ window.addEventListener('keyup', function (e) {
         `[key-type="${e.code}"]`
     );
     el.classList.remove('active');
+    removeShift(el);
 })
 
 buttons.forEach(btn => btn.addEventListener('click', () => {
@@ -131,6 +133,25 @@ function detectChangeLang(btn) {
                 changeLang();
             }
         }
+    }
+}
+
+function detectShift(btn){
+    if (btn.getAttribute('key-type') === 'ShiftLeft' | btn.getAttribute('key-type') === 'ShiftRight') {
+        document.querySelectorAll('.shift').forEach(el => el.classList.remove('hidden'));
+        if(document.querySelector('.caseDown').classList.contains('hidden')){
+            document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
+        }
+        else{
+            document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));  
+        }
+    }
+}
+
+function removeShift(btn){
+    if (btn.getAttribute('key-type') === 'ShiftLeft' | btn.getAttribute('key-type') === 'ShiftRight') {
+        document.querySelectorAll('.shift').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.caseDown').forEach(el => el.classList.remove('hidden'));  
     }
 }
 

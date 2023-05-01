@@ -1,5 +1,5 @@
 span {
-    cursor: default;
+    cursor: pointer;
 }
 
 .keyboard {
@@ -67,4 +67,5 @@ span {
 
 .keyboard-key.active {
     background-color: rgba(30, 214, 168, 0.867);
+    border-radius: 10px;
 }
