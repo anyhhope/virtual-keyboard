@@ -1,11 +1,3 @@
-let keyCode = [];
-
-document.onkeydown = function (e) {
-    keyCode.push(e.key);
-
-    console.log(keyCode);
-}
-
 const keyName = [
     ['Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace'],
     ['Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP', 'BracketLeft', 'BracketRight', 'Backslash'],
@@ -48,7 +40,8 @@ const keyShiftEng = [
 
 function init() {
     let body = document.querySelector('body');
-    body.innerHTML = '<div class="keyboard"></div>';
+    body.innerHTML += '<textarea class="input-text"></textarea>';
+    body.innerHTML += '<div class="keyboard"></div>';
     let keyboard = document.querySelector('.keyboard');
     for (let i = 0; i < keyName.length; i++) {
         keyboard.innerHTML += '<div class="keyboard-row"></div>';
@@ -64,3 +57,28 @@ function init() {
 }
 
 init();
+
+window.addEventListener('keydown', function (e) {
+    let el = document.querySelector(
+        `[key-type="${e.code}"]`
+    );
+    el.classList.add('active');
+})
+
+window.addEventListener('keyup', function (e) {
+    let el = document.querySelector(
+        `[key-type="${e.code}"]`
+    );
+    el.classList.remove('active');
+})
+
+const buttons = document.querySelectorAll('.keyboard-key');
+const textarea = document.querySelector('.input-text');
+
+buttons.forEach(btn => btn.addEventListener('click', () => {
+    btn.classList.add('active');
+    setTimeout(() => {
+        btn.classList.remove('active');
+    }, 125);
+    textarea.value += btn.childNodes[0].textContent;
+}));

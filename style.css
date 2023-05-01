@@ -1,7 +1,11 @@
+span {
+    cursor: default;
+}
+
 .keyboard {
     width: 680px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 15px;
     
     background-color: rgba(40, 59, 79, 0.867);
     color: whitesmoke;
@@ -9,8 +13,19 @@
     border: 7px solid rgba(32, 46, 60, 0.867);
 }
 
-.eng, .caseUp, .shift {
+.hidden, 
+.eng,
+.caseUp, 
+.shift {
     display: none;
+}
+
+.input-text {
+    width: 680px;
+    height: 200px;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 50px;
 }
 
 .keyboard-row {
@@ -26,6 +41,7 @@
     border-radius: 3px;
     text-align: center;
     padding-top: 5px;
+    transition: 0.2s ease-in-out all;
 }
 
 [key-type="CapsLock"] {
@@ -50,4 +66,8 @@
 
 [key-type="Space"] {
     width: 271px;
+}
+
+.keyboard-key.active {
+    background-color: rgba(30, 214, 168, 0.867);
 }
