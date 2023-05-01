@@ -74,6 +74,7 @@ window.addEventListener('keydown', function (e) {
     );
     el.classList.add('active');
     keyAction(el);
+    detectChangeLang(el);
 })
 
 window.addEventListener('keyup', function (e) {
@@ -91,7 +92,7 @@ buttons.forEach(btn => btn.addEventListener('click', () => {
     keyAction(btn);
 }));
 
-function showText(btn){
+function showText(btn) {
     let index = 0;
     if (btn.childNodes[0].classList.contains('hidden')) {
         index = 1;
@@ -103,16 +104,32 @@ function showText(btn){
     }
 }
 
-function keyAction(btn){
-    if(!reSpecialBtn.test(btn.getAttribute('key-type'))){
+function keyAction(btn) {
+    if (!reSpecialBtn.test(btn.getAttribute('key-type'))) {
         showText(btn);
     }
-    else{
-        if(btn.getAttribute('key-type') === 'Backspace'){
+    else {
+        if (btn.getAttribute('key-type') === 'Backspace') {
             textarea.value = textarea.value.slice(0, textarea.value.length - 1);
         }
-        else if(btn.getAttribute('key-type') === 'CapsLock'){
+        else if (btn.getAttribute('key-type') === 'CapsLock') {
             changeCase();
+        }
+        else if (btn.getAttribute('key-type') === 'Tab') {
+            textarea.value += '    ';
+        }
+        else if (btn.getAttribute('key-type') === 'Enter') {
+            textarea.value += '\n';
+        }
+    }
+}
+
+function detectChangeLang(btn) {
+    if (btn.getAttribute('key-type') === 'ControlLeft' | btn.getAttribute('key-type') === 'ControlRight') {
+        document.onkeyup = function (e) {
+            if (e.code === 'AltLeft' | e.code === 'AltRight') {
+                changeLang();
+            }
         }
     }
 }
