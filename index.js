@@ -52,6 +52,7 @@ function init() {
     let body = document.querySelector('body');
     body.innerHTML += '<textarea class="input-text" readonly></textarea>';
     body.innerHTML += '<div class="keyboard"></div>';
+    body.innerHTML += '<div class="description">Клавиатура создана в операционной системе Windows<br>Для переключения языка комбинация: ctrl + alt</div>';
     let keyboard = document.querySelector('.keyboard');
     for (let i = 0; i < keyName.length; i++) {
         keyboard.innerHTML += '<div class="keyboard-row"></div>';
@@ -66,16 +67,16 @@ function init() {
             key.innerHTML += '<span class="rus"><span class="caseDown">' + keyLetterRu[i][j] + '</span><span class="caseUp">' + rusUp + '</span><span class="shift">' + keyShiftRu[i][j] + '</span></span><span class="eng"><span class="caseDown">' + keyLetterEng[i][j] + '</span><span class="caseUp">' + engUp + '</span><span class="shift">' + keyShiftEng[i][j] + '</span></span>';
         }
     }
-    if(localStorage.getItem('language') === 'ru') {
+    if (localStorage.getItem('language') === 'ru') {
         document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
     }
-    else{
+    else {
         document.querySelectorAll('.rus').forEach(el => el.classList.add('hidden'));
     }
-    if(localStorage.getItem('caseType') === 'down'){
+    if (localStorage.getItem('caseType') === 'down') {
         document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
     }
-    else{
+    else {
         document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));
     }
     document.querySelectorAll('.shift').forEach(el => el.classList.add('hidden'));
@@ -85,23 +86,29 @@ init();
 
 const buttons = document.querySelectorAll('.keyboard-key');
 const textarea = document.querySelector('.input-text');
+let flag = false;
 
 window.addEventListener('keydown', function (e) {
     let el = document.querySelector(
         `[key-type="${e.code}"]`
     );
-    el.classList.add('active');
-    keyAction(el);
-    detectChangeLang(el);
-    detectShift(el);
+    if (el) {
+        e.preventDefault();
+        el.classList.add('active');
+        keyAction(el);
+        detectChangeLang(el);
+        detectShift(el);
+    }
 })
 
 window.addEventListener('keyup', function (e) {
     let el = document.querySelector(
         `[key-type="${e.code}"]`
     );
-    el.classList.remove('active');
-    removeShift(el);
+    if (el) {
+        el.classList.remove('active');
+        removeShift(el);
+    }
 })
 
 buttons.forEach(btn => btn.addEventListener('click', () => {
@@ -145,31 +152,29 @@ function keyAction(btn) {
 }
 
 function detectChangeLang(btn) {
-    if (btn.getAttribute('key-type') === 'ControlLeft' | btn.getAttribute('key-type') === 'ControlRight') {
-        document.onkeyup = function (e) {
-            if (e.code === 'AltLeft' | e.code === 'AltRight') {
-                changeLang();
-            }
-        }
+    if (btn.getAttribute('key-type') === 'ControlLeft' | btn.getAttribute('key-type') === 'ControlRight') flag = true;
+    if ((btn.getAttribute('key-type') === 'AltLeft' | btn.getAttribute('key-type') === 'AltRight') && flag === true) {
+        flag = false;
+        changeLang();
     }
 }
 
-function detectShift(btn){
+function detectShift(btn) {
     if (btn.getAttribute('key-type') === 'ShiftLeft' | btn.getAttribute('key-type') === 'ShiftRight') {
         document.querySelectorAll('.shift').forEach(el => el.classList.remove('hidden'));
-        if(document.querySelector('.caseDown').classList.contains('hidden')){
+        if (document.querySelector('.caseDown').classList.contains('hidden')) {
             document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
         }
-        else{
-            document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));  
+        else {
+            document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));
         }
     }
 }
 
-function removeShift(btn){
+function removeShift(btn) {
     if (btn.getAttribute('key-type') === 'ShiftLeft' | btn.getAttribute('key-type') === 'ShiftRight') {
         document.querySelectorAll('.shift').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.caseDown').forEach(el => el.classList.remove('hidden'));  
+        document.querySelectorAll('.caseDown').forEach(el => el.classList.remove('hidden'));
     }
 }
 
