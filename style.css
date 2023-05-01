@@ -13,10 +13,7 @@ span {
     border: 7px solid rgba(32, 46, 60, 0.867);
 }
 
-.hidden, 
-.eng,
-.caseUp, 
-.shift {
+.hidden {
     display: none;
 }
 

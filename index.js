@@ -40,7 +40,7 @@ const keyShiftEng = [
 
 function init() {
     let body = document.querySelector('body');
-    body.innerHTML += '<textarea class="input-text"></textarea>';
+    body.innerHTML += '<textarea class="input-text" readonly></textarea>';
     body.innerHTML += '<div class="keyboard"></div>';
     let keyboard = document.querySelector('.keyboard');
     for (let i = 0; i < keyName.length; i++) {
@@ -54,15 +54,22 @@ function init() {
             key.innerHTML += '<span class="rus"><span class="caseDown">' + keyLetterRu[i][j] + '</span><span class="caseUp">' + keyLetterRu[i][j].toUpperCase() + '</span><span class="shift">' + keyShiftRu[i][j] + '</span></span><span class="eng"><span class="caseDown">' + keyLetterEng[i][j] + '</span><span class="caseUp">' + keyLetterEng[i][j].toUpperCase() + '</span><span class="shift">' + keyShiftEng[i][j] + '</span></span>';
         }
     }
+    document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.shift').forEach(el => el.classList.add('hidden'));
 }
 
 init();
+
+const buttons = document.querySelectorAll('.keyboard-key');
+const textarea = document.querySelector('.input-text');
 
 window.addEventListener('keydown', function (e) {
     let el = document.querySelector(
         `[key-type="${e.code}"]`
     );
     el.classList.add('active');
+    showText(el);
 })
 
 window.addEventListener('keyup', function (e) {
@@ -72,13 +79,44 @@ window.addEventListener('keyup', function (e) {
     el.classList.remove('active');
 })
 
-const buttons = document.querySelectorAll('.keyboard-key');
-const textarea = document.querySelector('.input-text');
-
 buttons.forEach(btn => btn.addEventListener('click', () => {
     btn.classList.add('active');
     setTimeout(() => {
         btn.classList.remove('active');
     }, 125);
-    textarea.value += btn.childNodes[0].textContent;
+    showText(btn);
 }));
+
+function showText(btn){
+    let index = 0;
+    if (btn.childNodes[0].classList.contains('hidden')) {
+        index = 1;
+    }
+    for (child of btn.childNodes[index].childNodes) {
+        if (!child.classList.contains('hidden')) {
+            textarea.value += child.textContent;
+        }
+    }
+}
+
+function changeLang() {
+    if (document.querySelector('.eng').classList.contains('hidden')) {
+        document.querySelectorAll('.eng').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.rus').forEach(el => el.classList.add('hidden'));
+    }
+    else {
+        document.querySelectorAll('.rus').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
+    }
+}
+
+function changeCase() {
+    if (document.querySelector('.caseUp').classList.contains('hidden')) {
+        document.querySelectorAll('.caseUp').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));
+    }
+    else {
+        document.querySelectorAll('.caseDown').forEach(el => el.classList.remove('hidden'));
+        document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
+    }
+}
