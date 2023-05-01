@@ -40,6 +40,14 @@ const keyShiftEng = [
 
 const reSpecialBtn = /Backspace|ShiftLeft|ShiftRight|ControlLeft|ControlRight|MetaLeft|AltLeft|AltRight|CapsLock|Tab|Enter/;
 
+function setLocalStorage() {
+    let lang = document.querySelector('.eng').classList.contains('hidden') ? 'ru' : 'eng';
+    let caseType = document.querySelector('.caseUp').classList.contains('hidden') ? 'down' : 'up';
+    localStorage.setItem('language', lang);
+    localStorage.setItem('caseType', caseType);
+}
+window.addEventListener('beforeunload', setLocalStorage);
+
 function init() {
     let body = document.querySelector('body');
     body.innerHTML += '<textarea class="input-text" readonly></textarea>';
@@ -58,8 +66,18 @@ function init() {
             key.innerHTML += '<span class="rus"><span class="caseDown">' + keyLetterRu[i][j] + '</span><span class="caseUp">' + rusUp + '</span><span class="shift">' + keyShiftRu[i][j] + '</span></span><span class="eng"><span class="caseDown">' + keyLetterEng[i][j] + '</span><span class="caseUp">' + engUp + '</span><span class="shift">' + keyShiftEng[i][j] + '</span></span>';
         }
     }
-    document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
-    document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
+    if(localStorage.getItem('language') === 'ru') {
+        document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
+    }
+    else{
+        document.querySelectorAll('.rus').forEach(el => el.classList.add('hidden'));
+    }
+    if(localStorage.getItem('caseType') === 'down'){
+        document.querySelectorAll('.caseUp').forEach(el => el.classList.add('hidden'));
+    }
+    else{
+        document.querySelectorAll('.caseDown').forEach(el => el.classList.add('hidden'));
+    }
     document.querySelectorAll('.shift').forEach(el => el.classList.add('hidden'));
 }
 
