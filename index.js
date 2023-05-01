@@ -38,6 +38,8 @@ const keyShiftEng = [
     ['Ctrl', 'Win', 'Alt', ' ', 'Alt', '←', '↓', '→', 'Ctrl']
 ]
 
+const reSpecialBtn = /Backspace|ShiftLeft|ShiftRight|ControlLeft|ControlRight|MetaLeft|AltLeft|AltRight|CapsLock|Tab|Enter/;
+
 function init() {
     let body = document.querySelector('body');
     body.innerHTML += '<textarea class="input-text" readonly></textarea>';
@@ -51,7 +53,9 @@ function init() {
             keyRow.innerHTML += '<div class="keyboard-key" key-type="' + keyName[i][j] + '"></div>';
             let key = document.querySelectorAll('.keyboard-key');
             key = key[key.length - 1];
-            key.innerHTML += '<span class="rus"><span class="caseDown">' + keyLetterRu[i][j] + '</span><span class="caseUp">' + keyLetterRu[i][j].toUpperCase() + '</span><span class="shift">' + keyShiftRu[i][j] + '</span></span><span class="eng"><span class="caseDown">' + keyLetterEng[i][j] + '</span><span class="caseUp">' + keyLetterEng[i][j].toUpperCase() + '</span><span class="shift">' + keyShiftEng[i][j] + '</span></span>';
+            let rusUp = !reSpecialBtn.test(keyName[i][j]) ? keyLetterRu[i][j].toUpperCase() : keyLetterRu[i][j];
+            let engUp = !reSpecialBtn.test(keyName[i][j]) ? keyLetterEng[i][j].toUpperCase() : keyLetterEng[i][j];
+            key.innerHTML += '<span class="rus"><span class="caseDown">' + keyLetterRu[i][j] + '</span><span class="caseUp">' + rusUp + '</span><span class="shift">' + keyShiftRu[i][j] + '</span></span><span class="eng"><span class="caseDown">' + keyLetterEng[i][j] + '</span><span class="caseUp">' + engUp + '</span><span class="shift">' + keyShiftEng[i][j] + '</span></span>';
         }
     }
     document.querySelectorAll('.eng').forEach(el => el.classList.add('hidden'));
@@ -69,7 +73,7 @@ window.addEventListener('keydown', function (e) {
         `[key-type="${e.code}"]`
     );
     el.classList.add('active');
-    showText(el);
+    keyAction(el);
 })
 
 window.addEventListener('keyup', function (e) {
@@ -84,7 +88,7 @@ buttons.forEach(btn => btn.addEventListener('click', () => {
     setTimeout(() => {
         btn.classList.remove('active');
     }, 125);
-    showText(btn);
+    keyAction(btn);
 }));
 
 function showText(btn){
@@ -95,6 +99,20 @@ function showText(btn){
     for (child of btn.childNodes[index].childNodes) {
         if (!child.classList.contains('hidden')) {
             textarea.value += child.textContent;
+        }
+    }
+}
+
+function keyAction(btn){
+    if(!reSpecialBtn.test(btn.getAttribute('key-type'))){
+        showText(btn);
+    }
+    else{
+        if(btn.getAttribute('key-type') === 'Backspace'){
+            textarea.value = textarea.value.slice(0, textarea.value.length - 1);
+        }
+        else if(btn.getAttribute('key-type') === 'CapsLock'){
+            changeCase();
         }
     }
 }
