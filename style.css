@@ -1,0 +1,78 @@
+span {
+    cursor: pointer;
+}
+
+.keyboard {
+    width: 680px;
+    margin: 0 auto;
+    margin-top: 15px;
+    
+    background-color: rgba(40, 59, 79, 0.867);
+    color: whitesmoke;
+    border-radius: 10px;
+    border: 7px solid rgba(32, 46, 60, 0.867);
+}
+
+.hidden {
+    display: none;
+}
+
+.input-text {
+    width: 680px;
+    height: 200px;
+    display: flex;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: space-around;
+}
+
+.keyboard-key {
+    width: 40px;
+    height: 35px;
+    margin: 2px 0;
+    background-color: rgba(28, 39, 51, 0.867);
+    border-radius: 3px;
+    text-align: center;
+    padding-top: 5px;
+    transition: 0.2s ease-in-out all;
+}
+
+[key-type="CapsLock"] {
+    width: 80px;
+}
+
+[key-type="ShiftLeft"] {
+    width: 95px;
+}
+
+[key-type="Backspace"] {
+    width: 95px;
+}
+
+[key-type="Enter"] {
+    width: 100px;
+}
+
+[key-type="ShiftRight"] {
+    width: 100px;
+}
+
+[key-type="Space"] {
+    width: 271px;
+}
+
+.keyboard-key.active {
+    background-color: rgba(30, 214, 168, 0.867);
+    border-radius: 10px;
+}
+
+.description {
+    width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 20px;
+}
